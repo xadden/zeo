@@ -40,12 +40,13 @@
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(216, 23);
             this.buttonSave.TabIndex = 1;
-            this.buttonSave.Text = "Save";
+            this.buttonSave.Text = "Accept";
             this.buttonSave.UseVisualStyleBackColor = true;
             this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
             // 
             // FormInputModal
             // 
+            this.AcceptButton = this.buttonSave;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(237, 72);
@@ -55,7 +56,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormInputModal";
-            this.Text = "Edit Series";
+            this.Text = "Input";
             this.Load += new System.EventHandler(this.FormEditSeries_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

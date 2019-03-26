@@ -12,7 +12,7 @@ using System.ServiceModel.Syndication;
 namespace FormZeo {
     public partial class Zeo : Form {
         string rssUrl = "http://horriblesubs.info/rss.php?res=1080";
-        string nyaaUrl = "https://nyaa.si/?f=0&c=0_0&q=Horriblesubs 1080 %search%&page=rss";
+        string nyaaUrl = "https://nyaa.si/?f=0&c=0_0&q=Horriblesubs 1080 %search%&page=rss&magnets";
         private static System.Timers.Timer timerCheckEpisodes;
         private string[] followingSeries = null;
         string fileFollowingSeries = null;
@@ -22,7 +22,7 @@ namespace FormZeo {
          * Save files in %appdata%\Zeo
          * Save and read downloadedEpisodes from file
          * Change rss feed, option to choose anime or tv shows
-         * 
+         * Ask for completed torrent folder and where sharedlibrary is
          */
 
         public Zeo() {
@@ -83,6 +83,30 @@ namespace FormZeo {
             List<Episode> episodes = getFeed();
             foreach (Episode episode in episodes)
                 listBoxOfEpisodes.Items.Add(episode);
+
+            #region FileSystemWatcher Configuration
+            watcher.Path = @"D:\Torrents\Completed";
+            watcher.NotifyFilter = NotifyFilters.LastAccess
+                                 | NotifyFilters.LastWrite
+                                 | NotifyFilters.FileName
+                                 | NotifyFilters.DirectoryName;
+            watcher.Filter = "*[HorribleSubs]*.mkv";
+            watcher.Created += new FileSystemEventHandler(OnChanged);
+            watcher.Changed += new FileSystemEventHandler(OnChanged);
+            watcher.EnableRaisingEvents = true;
+            #endregion
+        }
+
+        private void OnChanged(object source, FileSystemEventArgs e) {
+            string folder;
+            int start;
+
+            folder = e.Name.Replace("[HorribleSubs] ", "");
+            start = folder.IndexOf(" - ");
+            folder = folder.Remove(start, folder.Length - start); //Remove everything after ' - ' is found
+
+            Directory.CreateDirectory($@"D:\SharedLibrary\{folder}"); //if folder already exists, it will be ignored
+            File.Move($@"D:\Torrents\Completed\{e.Name}", $@"D:\SharedLibrary\{folder}\{e.Name}");
         }
 
         /* 
@@ -132,7 +156,7 @@ namespace FormZeo {
 
         /*
          * Double click on system tray icon makes form visible
-         */ 
+         */
         private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e) {
             Show();
             this.WindowState = FormWindowState.Normal;
@@ -141,7 +165,7 @@ namespace FormZeo {
 
         /*
          * Open ManageSeries form
-         */ 
+         */
         private void buttonManageSeries_Click(object sender, EventArgs e) {
             FormManageSeries form = new FormManageSeries();
             form.followingSeries = followingSeries;
