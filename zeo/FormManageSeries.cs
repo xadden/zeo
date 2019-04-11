@@ -50,9 +50,11 @@ namespace Zeo {
         }
 
         private void FormManageSeries_FormClosed(object sender, FormClosedEventArgs e) {
-            updatedList = listBoxFollowingSeries.Items.OfType<string>().ToArray();
-            File.WriteAllLines(path, updatedList);
-            this.DialogResult = DialogResult.OK;
+            if (path != null) {
+                updatedList = listBoxFollowingSeries.Items.OfType<string>().ToArray();
+                File.WriteAllLines(path, updatedList);
+                this.DialogResult = DialogResult.OK;
+            }
         }
     }
 }

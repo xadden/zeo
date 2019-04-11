@@ -22,5 +22,41 @@ namespace Zeo.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string torrentPath {
+            get {
+                return ((string)(this["torrentPath"]));
+            }
+            set {
+                this["torrentPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string completedTorrentsPath {
+            get {
+                return ((string)(this["completedTorrentsPath"]));
+            }
+            set {
+                this["completedTorrentsPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string saveTorrentsPath {
+            get {
+                return ((string)(this["saveTorrentsPath"]));
+            }
+            set {
+                this["saveTorrentsPath"] = value;
+            }
+        }
     }
 }

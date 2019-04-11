@@ -34,12 +34,12 @@
             this.listBoxFollowingSeries.FormattingEnabled = true;
             this.listBoxFollowingSeries.Location = new System.Drawing.Point(12, 12);
             this.listBoxFollowingSeries.Name = "listBoxFollowingSeries";
-            this.listBoxFollowingSeries.Size = new System.Drawing.Size(250, 303);
+            this.listBoxFollowingSeries.Size = new System.Drawing.Size(250, 160);
             this.listBoxFollowingSeries.TabIndex = 0;
             // 
             // buttonEditSeries
             // 
-            this.buttonEditSeries.Location = new System.Drawing.Point(12, 351);
+            this.buttonEditSeries.Location = new System.Drawing.Point(12, 207);
             this.buttonEditSeries.Name = "buttonEditSeries";
             this.buttonEditSeries.Size = new System.Drawing.Size(250, 23);
             this.buttonEditSeries.TabIndex = 1;
@@ -49,7 +49,7 @@
             // 
             // buttonAddSeries
             // 
-            this.buttonAddSeries.Location = new System.Drawing.Point(12, 322);
+            this.buttonAddSeries.Location = new System.Drawing.Point(12, 178);
             this.buttonAddSeries.Name = "buttonAddSeries";
             this.buttonAddSeries.Size = new System.Drawing.Size(250, 23);
             this.buttonAddSeries.TabIndex = 2;
@@ -59,7 +59,7 @@
             // 
             // buttonDeleteSeries
             // 
-            this.buttonDeleteSeries.Location = new System.Drawing.Point(12, 380);
+            this.buttonDeleteSeries.Location = new System.Drawing.Point(12, 236);
             this.buttonDeleteSeries.Name = "buttonDeleteSeries";
             this.buttonDeleteSeries.Size = new System.Drawing.Size(250, 23);
             this.buttonDeleteSeries.TabIndex = 3;
@@ -71,7 +71,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(277, 415);
+            this.ClientSize = new System.Drawing.Size(277, 269);
             this.Controls.Add(this.buttonDeleteSeries);
             this.Controls.Add(this.buttonAddSeries);
             this.Controls.Add(this.buttonEditSeries);

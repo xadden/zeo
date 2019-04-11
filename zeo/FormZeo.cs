@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using System.Xml;
 using Zeo;
 using Zeo.Episode;
+using Zeo.Properties;
 using System.ServiceModel.Syndication;
 
 namespace FormZeo {
@@ -15,14 +16,13 @@ namespace FormZeo {
         string nyaaUrl = "https://nyaa.si/?f=0&c=0_0&q=Horriblesubs 1080 %search%&page=rss&magnets";
         private static System.Timers.Timer timerCheckEpisodes;
         private string[] followingSeries = null;
-        string fileFollowingSeries = null;
+        string followingSeriesPath = null;
 
 
         /* TODO List:
-         * Save files in %appdata%\Zeo
          * Save and read downloadedEpisodes from file
          * Change rss feed, option to choose anime or tv shows
-         * Ask for completed torrent folder and where sharedlibrary is
+         * Add warnings when missing configurations
          */
 
         public Zeo() {
@@ -40,18 +40,16 @@ namespace FormZeo {
             SyndicationFeed feed = SyndicationFeed.Load(reader);
             reader.Close();
             string title = null;
-            if (followingSeries != null) {
-                foreach (SyndicationItem item in feed.Items) {
-                    title = item.Title.Text.Replace("[HorribleSubs]", "").Replace("[1080p].mkv", "");
+
+            foreach (SyndicationItem item in feed.Items) {
+                title = item.Title.Text.Replace("[HorribleSubs]", "").Replace("[1080p].mkv", "");
+                if (followingSeries != null) {
                     foreach (String series in followingSeries)
                         if (title.ToUpper().Contains(series.ToUpper()))
                             episodes.Add(new Episode(title, item.Links[0].Uri.ToString()));
-                }
-            } else
-                foreach (SyndicationItem item in feed.Items) {
-                    title = item.Title.Text.Replace("[HorribleSubs]", "").Replace("[1080p].mkv", "");
+                } else
                     episodes.Add(new Episode(title, item.Links[0].Uri.ToString()));
-                }
+            }
 
             return episodes;
         }
@@ -61,10 +59,11 @@ namespace FormZeo {
          * File is located in the folder %appdata%\Zeo
          */
         private void readSeriesFiles() {
-            fileFollowingSeries = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Zeo\\followingSeries.dat";
+            if(followingSeriesPath == null)
+                followingSeriesPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Zeo\\followingSeries.dat";
 
-            if (File.Exists(fileFollowingSeries))
-                followingSeries = File.ReadAllLines(fileFollowingSeries);
+            if (File.Exists(followingSeriesPath))
+                    followingSeries = File.ReadAllLines(followingSeriesPath);
         }
 
         /* 
@@ -84,6 +83,10 @@ namespace FormZeo {
             foreach (Episode episode in episodes)
                 listBoxOfEpisodes.Items.Add(episode);
 
+            textBoxCompletedTorrent.Text = Settings.Default.completedTorrentsPath;
+            textBoxDownloadedEpisode.Text = Settings.Default.saveTorrentsPath;
+            textBoxTorrentApp.Text = Settings.Default.torrentPath;
+
             #region FileSystemWatcher Configuration
             watcher.Path = @"D:\Torrents\Completed";
             watcher.NotifyFilter = NotifyFilters.LastAccess
@@ -97,16 +100,26 @@ namespace FormZeo {
             #endregion
         }
 
+        /*
+         * Moves downloaded episodes from one path to another and organizes by name
+         * TODO add warning saying paths are not set
+         */ 
         private void OnChanged(object source, FileSystemEventArgs e) {
-            string folder;
-            int start;
+            if(!string.IsNullOrEmpty(Settings.Default.completedTorrentsPath) && !string.IsNullOrEmpty(Settings.Default.saveTorrentsPath)) {
+                string folder;
+                int start;
 
-            folder = e.Name.Replace("[HorribleSubs] ", "");
-            start = folder.IndexOf(" - ");
-            folder = folder.Remove(start, folder.Length - start); //Remove everything after ' - ' is found
+                folder = e.Name.Replace("[HorribleSubs] ", "");
+                start = folder.IndexOf(" - ");
+                folder = folder.Remove(start, folder.Length - start); //Remove everything after ' - ' is found
 
-            Directory.CreateDirectory($@"D:\SharedLibrary\{folder}"); //if folder already exists, it will be ignored
-            File.Move($@"D:\Torrents\Completed\{e.Name}", $@"D:\SharedLibrary\{folder}\{e.Name}");
+                string completedFolderPath = Settings.Default.completedTorrentsPath + System.IO.Path.DirectorySeparatorChar + e.Name;
+                string saveFolderPath = Settings.Default.saveTorrentsPath + System.IO.Path.DirectorySeparatorChar + folder;
+                string saveFilePath = Settings.Default.saveTorrentsPath + System.IO.Path.DirectorySeparatorChar + folder + System.IO.Path.DirectorySeparatorChar + e.Name;
+
+                Directory.CreateDirectory(saveFolderPath); //if folder already exists, it will be ignored
+                File.Move(completedFolderPath, saveFilePath);
+            }
         }
 
         /* 
@@ -169,7 +182,7 @@ namespace FormZeo {
         private void buttonManageSeries_Click(object sender, EventArgs e) {
             FormManageSeries form = new FormManageSeries();
             form.followingSeries = followingSeries;
-            form.path = fileFollowingSeries;
+            form.path = followingSeriesPath;
             if (form.ShowDialog() == DialogResult.OK) {
                 followingSeries = form.updatedList;
                 form.Dispose();
@@ -202,6 +215,48 @@ namespace FormZeo {
             }
 
             form.Dispose();
+        }
+
+        /*
+         * Open torrent
+         * TODO: Let user choose it's own torrent
+         */ 
+        private void buttonLaunchTorrent_Click(object sender, EventArgs e) {
+            if (!string.IsNullOrEmpty(Settings.Default.torrentPath))
+                System.Diagnostics.Process.Start(@"C:\Program Files (x86)\Deluge\deluge.exe");
+            else
+                MessageBox.Show("Define torrent path first in the settings.");
+        }
+
+        private void quitToolStripMenuItem_Click(object sender, EventArgs e) {
+            this.Close();
+        }
+
+        private void buttonCompletedTorrentPath_Click(object sender, EventArgs e) {
+            using (FolderBrowserDialog folder = new FolderBrowserDialog())
+                if (folder.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(folder.SelectedPath)) {
+                    Settings.Default.completedTorrentsPath = folder.SelectedPath;
+                    Settings.Default.Save();
+                    textBoxCompletedTorrent.Text = folder.SelectedPath;
+                }
+        }
+
+        private void buttonDownloadedEpisodesPath_Click(object sender, EventArgs e) {
+            using (FolderBrowserDialog folder = new FolderBrowserDialog())
+                if (folder.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(folder.SelectedPath)) {
+                    Settings.Default.saveTorrentsPath = folder.SelectedPath;
+                    Settings.Default.Save();
+                    textBoxDownloadedEpisode.Text = folder.SelectedPath;
+                }
+        }
+
+        private void buttonTorrentPath_Click(object sender, EventArgs e) {
+            using (OpenFileDialog file = new OpenFileDialog())
+                if (file.ShowDialog() == DialogResult.OK) {
+                    Settings.Default.torrentPath = file.FileName;
+                    Settings.Default.Save();
+                    textBoxTorrentApp.Text = file.FileName;
+                }
         }
     }
 }
