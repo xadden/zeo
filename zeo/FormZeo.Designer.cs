@@ -28,28 +28,38 @@
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.watcher = new System.IO.FileSystemWatcher();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.listBoxOfEpisodes = new System.Windows.Forms.ListBox();
             this.buttonManageSeries = new System.Windows.Forms.Button();
             this.buttonSpecificEpisode = new System.Windows.Forms.Button();
             this.buttonRefreshFeed = new System.Windows.Forms.Button();
             this.buttonLaunchTorrent = new System.Windows.Forms.Button();
-            this.listBoxOfEpisodes = new System.Windows.Forms.ListBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.textBoxCompletedTorrent = new System.Windows.Forms.TextBox();
-            this.buttonCompletedTorrentPath = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.textBoxDownloadedEpisode = new System.Windows.Forms.TextBox();
-            this.buttonDownloadedEpisodesPath = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
             this.textBoxTorrentApp = new System.Windows.Forms.TextBox();
             this.buttonTorrentPath = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
+            this.textBoxDownloadedEpisode = new System.Windows.Forms.TextBox();
+            this.buttonDownloadedEpisodesPath = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.textBoxCompletedTorrent = new System.Windows.Forms.TextBox();
+            this.buttonCompletedTorrentPath = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.buttonOpenCompletedTorrentPath = new System.Windows.Forms.Button();
+            this.buttonOpenDownloadedEpisodesPath = new System.Windows.Forms.Button();
+            this.contextMenuStripSystemTray = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuStrip = new System.Windows.Forms.MenuStrip();
+            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.watcher)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.contextMenuStripSystemTray.SuspendLayout();
+            this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // notifyIcon
             // 
+            this.notifyIcon.ContextMenuStrip = this.contextMenuStripSystemTray;
             this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
             this.notifyIcon.Text = "Zeo";
             this.notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon_MouseDoubleClick);
@@ -65,12 +75,21 @@
             this.groupBox1.Controls.Add(this.buttonManageSeries);
             this.groupBox1.Controls.Add(this.buttonSpecificEpisode);
             this.groupBox1.Controls.Add(this.buttonRefreshFeed);
-            this.groupBox1.Location = new System.Drawing.Point(12, 12);
+            this.groupBox1.Location = new System.Drawing.Point(12, 28);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(345, 284);
             this.groupBox1.TabIndex = 9;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Episodes";
+            // 
+            // listBoxOfEpisodes
+            // 
+            this.listBoxOfEpisodes.FormattingEnabled = true;
+            this.listBoxOfEpisodes.Location = new System.Drawing.Point(6, 19);
+            this.listBoxOfEpisodes.Name = "listBoxOfEpisodes";
+            this.listBoxOfEpisodes.Size = new System.Drawing.Size(330, 199);
+            this.listBoxOfEpisodes.TabIndex = 0;
+            this.listBoxOfEpisodes.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listBoxOfAnimes_MouseDoubleClick);
             // 
             // buttonManageSeries
             // 
@@ -112,17 +131,10 @@
             this.buttonLaunchTorrent.UseVisualStyleBackColor = true;
             this.buttonLaunchTorrent.Click += new System.EventHandler(this.buttonLaunchTorrent_Click);
             // 
-            // listBoxOfEpisodes
-            // 
-            this.listBoxOfEpisodes.FormattingEnabled = true;
-            this.listBoxOfEpisodes.Location = new System.Drawing.Point(6, 19);
-            this.listBoxOfEpisodes.Name = "listBoxOfEpisodes";
-            this.listBoxOfEpisodes.Size = new System.Drawing.Size(330, 199);
-            this.listBoxOfEpisodes.TabIndex = 0;
-            this.listBoxOfEpisodes.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listBoxOfAnimes_MouseDoubleClick);
-            // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.buttonOpenDownloadedEpisodesPath);
+            this.groupBox2.Controls.Add(this.buttonOpenCompletedTorrentPath);
             this.groupBox2.Controls.Add(this.textBoxTorrentApp);
             this.groupBox2.Controls.Add(this.buttonTorrentPath);
             this.groupBox2.Controls.Add(this.label3);
@@ -133,66 +145,13 @@
             this.groupBox2.Controls.Add(this.buttonLaunchTorrent);
             this.groupBox2.Controls.Add(this.buttonCompletedTorrentPath);
             this.groupBox2.Controls.Add(this.label1);
-            this.groupBox2.Location = new System.Drawing.Point(363, 12);
+            this.groupBox2.Location = new System.Drawing.Point(363, 28);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(328, 284);
             this.groupBox2.TabIndex = 10;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Settings";
-            // 
-            // textBoxCompletedTorrent
-            // 
-            this.textBoxCompletedTorrent.Location = new System.Drawing.Point(9, 35);
-            this.textBoxCompletedTorrent.Name = "textBoxCompletedTorrent";
-            this.textBoxCompletedTorrent.ReadOnly = true;
-            this.textBoxCompletedTorrent.Size = new System.Drawing.Size(309, 20);
-            this.textBoxCompletedTorrent.TabIndex = 5;
-            // 
-            // buttonCompletedTorrentPath
-            // 
-            this.buttonCompletedTorrentPath.Location = new System.Drawing.Point(9, 61);
-            this.buttonCompletedTorrentPath.Name = "buttonCompletedTorrentPath";
-            this.buttonCompletedTorrentPath.Size = new System.Drawing.Size(309, 23);
-            this.buttonCompletedTorrentPath.TabIndex = 4;
-            this.buttonCompletedTorrentPath.Text = "Change";
-            this.buttonCompletedTorrentPath.UseVisualStyleBackColor = true;
-            this.buttonCompletedTorrentPath.Click += new System.EventHandler(this.buttonCompletedTorrentPath_Click);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 19);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(124, 13);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Completed Torrents Path";
-            // 
-            // textBoxDownloadedEpisode
-            // 
-            this.textBoxDownloadedEpisode.Location = new System.Drawing.Point(9, 115);
-            this.textBoxDownloadedEpisode.Name = "textBoxDownloadedEpisode";
-            this.textBoxDownloadedEpisode.ReadOnly = true;
-            this.textBoxDownloadedEpisode.Size = new System.Drawing.Size(309, 20);
-            this.textBoxDownloadedEpisode.TabIndex = 10;
-            // 
-            // buttonDownloadedEpisodesPath
-            // 
-            this.buttonDownloadedEpisodesPath.Location = new System.Drawing.Point(9, 141);
-            this.buttonDownloadedEpisodesPath.Name = "buttonDownloadedEpisodesPath";
-            this.buttonDownloadedEpisodesPath.Size = new System.Drawing.Size(309, 23);
-            this.buttonDownloadedEpisodesPath.TabIndex = 9;
-            this.buttonDownloadedEpisodesPath.Text = "Change";
-            this.buttonDownloadedEpisodesPath.UseVisualStyleBackColor = true;
-            this.buttonDownloadedEpisodesPath.Click += new System.EventHandler(this.buttonDownloadedEpisodesPath_Click);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 99);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(57, 13);
-            this.label2.TabIndex = 8;
-            this.label2.Text = "Save Path";
+            this.groupBox2.Visible = false;
             // 
             // textBoxTorrentApp
             // 
@@ -221,15 +180,131 @@
             this.label3.TabIndex = 11;
             this.label3.Text = "Torrent Application Path";
             // 
+            // textBoxDownloadedEpisode
+            // 
+            this.textBoxDownloadedEpisode.Location = new System.Drawing.Point(9, 115);
+            this.textBoxDownloadedEpisode.Name = "textBoxDownloadedEpisode";
+            this.textBoxDownloadedEpisode.ReadOnly = true;
+            this.textBoxDownloadedEpisode.Size = new System.Drawing.Size(309, 20);
+            this.textBoxDownloadedEpisode.TabIndex = 10;
+            // 
+            // buttonDownloadedEpisodesPath
+            // 
+            this.buttonDownloadedEpisodesPath.Location = new System.Drawing.Point(9, 141);
+            this.buttonDownloadedEpisodesPath.Name = "buttonDownloadedEpisodesPath";
+            this.buttonDownloadedEpisodesPath.Size = new System.Drawing.Size(153, 23);
+            this.buttonDownloadedEpisodesPath.TabIndex = 9;
+            this.buttonDownloadedEpisodesPath.Text = "Change";
+            this.buttonDownloadedEpisodesPath.UseVisualStyleBackColor = true;
+            this.buttonDownloadedEpisodesPath.Click += new System.EventHandler(this.buttonDownloadedEpisodesPath_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 99);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(57, 13);
+            this.label2.TabIndex = 8;
+            this.label2.Text = "Save Path";
+            // 
+            // textBoxCompletedTorrent
+            // 
+            this.textBoxCompletedTorrent.Location = new System.Drawing.Point(9, 35);
+            this.textBoxCompletedTorrent.Name = "textBoxCompletedTorrent";
+            this.textBoxCompletedTorrent.ReadOnly = true;
+            this.textBoxCompletedTorrent.Size = new System.Drawing.Size(309, 20);
+            this.textBoxCompletedTorrent.TabIndex = 5;
+            // 
+            // buttonCompletedTorrentPath
+            // 
+            this.buttonCompletedTorrentPath.Location = new System.Drawing.Point(9, 61);
+            this.buttonCompletedTorrentPath.Name = "buttonCompletedTorrentPath";
+            this.buttonCompletedTorrentPath.Size = new System.Drawing.Size(153, 23);
+            this.buttonCompletedTorrentPath.TabIndex = 4;
+            this.buttonCompletedTorrentPath.Text = "Change";
+            this.buttonCompletedTorrentPath.UseVisualStyleBackColor = true;
+            this.buttonCompletedTorrentPath.Click += new System.EventHandler(this.buttonCompletedTorrentPath_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 19);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(124, 13);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "Completed Torrents Path";
+            // 
+            // buttonOpenCompletedTorrentPath
+            // 
+            this.buttonOpenCompletedTorrentPath.Location = new System.Drawing.Point(165, 61);
+            this.buttonOpenCompletedTorrentPath.Name = "buttonOpenCompletedTorrentPath";
+            this.buttonOpenCompletedTorrentPath.Size = new System.Drawing.Size(153, 23);
+            this.buttonOpenCompletedTorrentPath.TabIndex = 14;
+            this.buttonOpenCompletedTorrentPath.Text = "Open path";
+            this.buttonOpenCompletedTorrentPath.UseVisualStyleBackColor = true;
+            this.buttonOpenCompletedTorrentPath.Click += new System.EventHandler(this.buttonOpenCompletedTorrentPath_Click);
+            // 
+            // buttonOpenDownloadedEpisodesPath
+            // 
+            this.buttonOpenDownloadedEpisodesPath.Location = new System.Drawing.Point(165, 141);
+            this.buttonOpenDownloadedEpisodesPath.Name = "buttonOpenDownloadedEpisodesPath";
+            this.buttonOpenDownloadedEpisodesPath.Size = new System.Drawing.Size(153, 23);
+            this.buttonOpenDownloadedEpisodesPath.TabIndex = 15;
+            this.buttonOpenDownloadedEpisodesPath.Text = "Open path";
+            this.buttonOpenDownloadedEpisodesPath.UseVisualStyleBackColor = true;
+            this.buttonOpenDownloadedEpisodesPath.Click += new System.EventHandler(this.buttonOpenDownloadedEpisodesPath_Click);
+            // 
+            // contextMenuStripSystemTray
+            // 
+            this.contextMenuStripSystemTray.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.quitToolStripMenuItem});
+            this.contextMenuStripSystemTray.Name = "contextMenuStripSystemTray";
+            this.contextMenuStripSystemTray.Size = new System.Drawing.Size(98, 26);
+            // 
+            // quitToolStripMenuItem
+            // 
+            this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
+            this.quitToolStripMenuItem.Size = new System.Drawing.Size(97, 22);
+            this.quitToolStripMenuItem.Text = "Quit";
+            this.quitToolStripMenuItem.Click += new System.EventHandler(this.quitToolStripMenuItem_Click);
+            // 
+            // menuStrip
+            // 
+            this.menuStrip.BackColor = System.Drawing.SystemColors.Control;
+            this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.viewToolStripMenuItem});
+            this.menuStrip.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip.Name = "menuStrip";
+            this.menuStrip.Size = new System.Drawing.Size(366, 24);
+            this.menuStrip.TabIndex = 12;
+            this.menuStrip.Text = "menuStrip1";
+            // 
+            // viewToolStripMenuItem
+            // 
+            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.settingsToolStripMenuItem});
+            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.viewToolStripMenuItem.Text = "View";
+            // 
+            // settingsToolStripMenuItem
+            // 
+            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.settingsToolStripMenuItem.Text = "Settings";
+            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
+            // 
             // Zeo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(703, 304);
+            this.ClientSize = new System.Drawing.Size(366, 321);
+            this.Controls.Add(this.menuStrip);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MainMenuStrip = this.menuStrip;
             this.MaximizeBox = false;
             this.Name = "Zeo";
             this.Text = "Zeo";
@@ -239,7 +314,11 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.contextMenuStripSystemTray.ResumeLayout(false);
+            this.menuStrip.ResumeLayout(false);
+            this.menuStrip.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -262,6 +341,13 @@
         private System.Windows.Forms.TextBox textBoxCompletedTorrent;
         private System.Windows.Forms.Button buttonCompletedTorrentPath;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button buttonOpenDownloadedEpisodesPath;
+        private System.Windows.Forms.Button buttonOpenCompletedTorrentPath;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripSystemTray;
+        private System.Windows.Forms.ToolStripMenuItem quitToolStripMenuItem;
+        private System.Windows.Forms.MenuStrip menuStrip;
+        private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
     }
 }
 

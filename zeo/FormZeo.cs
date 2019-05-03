@@ -9,6 +9,8 @@ using Zeo;
 using Zeo.Episode;
 using Zeo.Properties;
 using System.ServiceModel.Syndication;
+using System.Drawing;
+using System.Threading;
 
 namespace FormZeo {
     public partial class Zeo : Form {
@@ -137,9 +139,10 @@ namespace FormZeo {
          */
         private void OnTimedEvent(Object source, ElapsedEventArgs e) {
             List<Episode> episodes = getFeed();
+            this.Invoke(new MethodInvoker(() => listBoxOfEpisodes.Items.Clear()));
+
             foreach (Episode episode in episodes)
                 this.Invoke(new MethodInvoker(() => listBoxOfEpisodes.Items.Add(episode)));
-            // check for new feed and refresh
         }
 
         /* 
@@ -173,6 +176,7 @@ namespace FormZeo {
         private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e) {
             Show();
             this.WindowState = FormWindowState.Normal;
+            Thread.Sleep(100); //Used so you don't accidentally click on another system tray icon
             notifyIcon.Visible = false;
         }
 
@@ -219,7 +223,6 @@ namespace FormZeo {
 
         /*
          * Open torrent
-         * TODO: Let user choose it's own torrent
          */ 
         private void buttonLaunchTorrent_Click(object sender, EventArgs e) {
             if (!string.IsNullOrEmpty(Settings.Default.torrentPath))
@@ -257,6 +260,26 @@ namespace FormZeo {
                     Settings.Default.Save();
                     textBoxTorrentApp.Text = file.FileName;
                 }
+        }
+
+        private void buttonOpenCompletedTorrentPath_Click(object sender, EventArgs e) {
+            Process.Start(Settings.Default.completedTorrentsPath);
+        }
+
+        private void buttonOpenDownloadedEpisodesPath_Click(object sender, EventArgs e) {
+            Process.Start(Settings.Default.saveTorrentsPath);
+        }
+
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e) {
+            if(settingsToolStripMenuItem.Checked) {
+                settingsToolStripMenuItem.Checked = false;
+                groupBox2.Visible = false;
+                this.Size = new Size(382, 360);
+            } else {
+                settingsToolStripMenuItem.Checked = true;
+                groupBox2.Visible = true;
+                this.Size = new Size(719, 360);
+            }
         }
     }
 }
