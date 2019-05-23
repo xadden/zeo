@@ -281,5 +281,13 @@ namespace FormZeo {
                 this.Size = new Size(719, 360);
             }
         }
+
+        private void openSaveFolderToolStripMenuItem_Click(object sender, EventArgs e) {
+            Process.Start(Settings.Default.saveTorrentsPath);
+        }
+
+        private void openDownloadedTorrentsFolderToolStripMenuItem_Click(object sender, EventArgs e) {
+            Process.Start(Settings.Default.completedTorrentsPath);
+        }
     }
 }
