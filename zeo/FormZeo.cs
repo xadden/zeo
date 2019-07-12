@@ -30,6 +30,12 @@ namespace FormZeo {
         public Zeo() {
             InitializeComponent();
             SetTimer();
+
+            //Hide Form if user wants to start minimized
+            if (Settings.Default.startMinimized) {
+                this.WindowState = FormWindowState.Minimized;
+                this.ShowInTaskbar = false;
+            }
         }
 
         /* 
@@ -78,6 +84,28 @@ namespace FormZeo {
                 listBoxOfEpisodes.Items.Add(episode);
         }
 
+        private void VerifyExistingFiles() {
+            if (!string.IsNullOrEmpty(Settings.Default.completedTorrentsPath) && !string.IsNullOrEmpty(Settings.Default.savePath)) {
+                string[] filePaths = Directory.GetFiles(Settings.Default.completedTorrentsPath, "*[HorribleSubs]*.mkv");
+                foreach (string path in filePaths) {
+                    string fileName = Path.GetFileName(path);
+                    string folderName;
+                    int start;
+
+                    folderName = fileName.Replace("[HorribleSubs] ", "");
+                    start = folderName.LastIndexOf(" - ");
+                    folderName = folderName.Remove(start, folderName.Length - start); //Remove everything after ' - ' is found
+
+                    string completedFolderPath = Settings.Default.completedTorrentsPath + System.IO.Path.DirectorySeparatorChar + fileName;
+                    string saveFolderPath = Settings.Default.savePath + System.IO.Path.DirectorySeparatorChar + folderName;
+                    string saveFilePath = Settings.Default.savePath + System.IO.Path.DirectorySeparatorChar + folderName + System.IO.Path.DirectorySeparatorChar + fileName;
+
+                    Directory.CreateDirectory(saveFolderPath); //if folder already exists, it will be ignored
+                    File.Move(completedFolderPath, saveFilePath);
+                }
+            }
+        }
+
         private void Zeo_Load(object sender, EventArgs e) {
             readSeriesFiles();
 
@@ -86,38 +114,47 @@ namespace FormZeo {
                 listBoxOfEpisodes.Items.Add(episode);
 
             textBoxCompletedTorrent.Text = Settings.Default.completedTorrentsPath;
-            textBoxDownloadedEpisode.Text = Settings.Default.saveTorrentsPath;
+            textBoxDownloadedEpisode.Text = Settings.Default.savePath;
             textBoxTorrentApp.Text = Settings.Default.torrentPath;
 
             #region FileSystemWatcher Configuration
-            watcher.Path = @"D:\Torrents\Completed";
-            watcher.NotifyFilter = NotifyFilters.LastAccess
-                                 | NotifyFilters.LastWrite
-                                 | NotifyFilters.FileName
-                                 | NotifyFilters.DirectoryName;
-            watcher.Filter = "*[HorribleSubs]*.mkv";
-            watcher.Created += new FileSystemEventHandler(OnChanged);
-            watcher.Changed += new FileSystemEventHandler(OnChanged);
-            watcher.EnableRaisingEvents = true;
+            if (!string.IsNullOrEmpty(Settings.Default.completedTorrentsPath)) {
+                watcher.Path = Settings.Default.completedTorrentsPath;
+                watcher.NotifyFilter = NotifyFilters.LastAccess
+                                     | NotifyFilters.LastWrite
+                                     | NotifyFilters.FileName
+                                     | NotifyFilters.DirectoryName;
+                watcher.Filter = "*[HorribleSubs]*.mkv";
+                watcher.Created += new FileSystemEventHandler(OnChanged);
+                watcher.Changed += new FileSystemEventHandler(OnChanged);
+                watcher.EnableRaisingEvents = true;
+            }
             #endregion
+
+            if (Settings.Default.startMinimized)
+                startMinimizedToolStripMenuItem.Checked = true;
+            else
+                startMinimizedToolStripMenuItem.Checked = false;
+
+            VerifyExistingFiles();
         }
 
         /*
          * Moves downloaded episodes from one path to another and organizes by name
          * TODO add warning saying paths are not set
-         */ 
+         */
         private void OnChanged(object source, FileSystemEventArgs e) {
-            if(!string.IsNullOrEmpty(Settings.Default.completedTorrentsPath) && !string.IsNullOrEmpty(Settings.Default.saveTorrentsPath)) {
-                string folder;
+            if(!string.IsNullOrEmpty(Settings.Default.completedTorrentsPath) && !string.IsNullOrEmpty(Settings.Default.savePath)) {
+                string folderName;
                 int start;
 
-                folder = e.Name.Replace("[HorribleSubs] ", "");
-                start = folder.IndexOf(" - ");
-                folder = folder.Remove(start, folder.Length - start); //Remove everything after ' - ' is found
+                folderName = e.Name.Replace("[HorribleSubs] ", "");
+                start = folderName.LastIndexOf(" - ");
+                folderName = folderName.Remove(start, folderName.Length - start); //Remove everything after ' - ' is found
 
                 string completedFolderPath = Settings.Default.completedTorrentsPath + System.IO.Path.DirectorySeparatorChar + e.Name;
-                string saveFolderPath = Settings.Default.saveTorrentsPath + System.IO.Path.DirectorySeparatorChar + folder;
-                string saveFilePath = Settings.Default.saveTorrentsPath + System.IO.Path.DirectorySeparatorChar + folder + System.IO.Path.DirectorySeparatorChar + e.Name;
+                string saveFolderPath = Settings.Default.savePath + System.IO.Path.DirectorySeparatorChar + folderName;
+                string saveFilePath = Settings.Default.savePath + System.IO.Path.DirectorySeparatorChar + folderName + System.IO.Path.DirectorySeparatorChar + e.Name;
 
                 Directory.CreateDirectory(saveFolderPath); //if folder already exists, it will be ignored
                 File.Move(completedFolderPath, saveFilePath);
@@ -247,7 +284,7 @@ namespace FormZeo {
         private void buttonDownloadedEpisodesPath_Click(object sender, EventArgs e) {
             using (FolderBrowserDialog folder = new FolderBrowserDialog())
                 if (folder.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(folder.SelectedPath)) {
-                    Settings.Default.saveTorrentsPath = folder.SelectedPath;
+                    Settings.Default.savePath = folder.SelectedPath;
                     Settings.Default.Save();
                     textBoxDownloadedEpisode.Text = folder.SelectedPath;
                 }
@@ -267,27 +304,40 @@ namespace FormZeo {
         }
 
         private void buttonOpenDownloadedEpisodesPath_Click(object sender, EventArgs e) {
-            Process.Start(Settings.Default.saveTorrentsPath);
+            Process.Start(Settings.Default.savePath);
         }
 
-        private void settingsToolStripMenuItem_Click(object sender, EventArgs e) {
-            if(settingsToolStripMenuItem.Checked) {
-                settingsToolStripMenuItem.Checked = false;
+        private void openSaveFolderToolStripMenuItem_Click(object sender, EventArgs e) {
+            Process.Start(Settings.Default.savePath);
+        }
+
+        private void openDownloadedTorrentsFolderToolStripMenuItem_Click(object sender, EventArgs e) {
+            Process.Start(Settings.Default.completedTorrentsPath);
+        }
+
+        private void toggleSettingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (toggleSettingsToolStripMenuItem.Checked) {
+                toggleSettingsToolStripMenuItem.Checked = false;
                 groupBox2.Visible = false;
                 this.Size = new Size(382, 360);
             } else {
-                settingsToolStripMenuItem.Checked = true;
+                toggleSettingsToolStripMenuItem.Checked = true;
                 groupBox2.Visible = true;
                 this.Size = new Size(719, 360);
             }
         }
 
-        private void openSaveFolderToolStripMenuItem_Click(object sender, EventArgs e) {
-            Process.Start(Settings.Default.saveTorrentsPath);
-        }
-
-        private void openDownloadedTorrentsFolderToolStripMenuItem_Click(object sender, EventArgs e) {
-            Process.Start(Settings.Default.completedTorrentsPath);
+        private void startMinimizedToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (Settings.Default.startMinimized) {
+                Settings.Default.startMinimized = false;
+                Settings.Default.Save();
+                startMinimizedToolStripMenuItem.Checked = false;
+            } else {
+                Settings.Default.startMinimized = true;
+                Settings.Default.Save();
+                startMinimizedToolStripMenuItem.Checked = true;
+            }
         }
     }
 }

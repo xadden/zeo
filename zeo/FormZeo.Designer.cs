@@ -49,9 +49,11 @@
             this.label1 = new System.Windows.Forms.Label();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openSaveFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openDownloadedTorrentsFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.settingsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toggleSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.startMinimizedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStripSystemTray.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.watcher)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -274,7 +276,8 @@
             // 
             this.menuStrip.BackColor = System.Drawing.SystemColors.Control;
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.viewToolStripMenuItem});
+            this.viewToolStripMenuItem,
+            this.settingsToolStripMenuItem1});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Size = new System.Drawing.Size(366, 24);
@@ -285,18 +288,10 @@
             // 
             this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openSaveFolderToolStripMenuItem,
-            this.openDownloadedTorrentsFolderToolStripMenuItem,
-            this.settingsToolStripMenuItem});
+            this.openDownloadedTorrentsFolderToolStripMenuItem});
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
             this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.viewToolStripMenuItem.Text = "View";
-            // 
-            // settingsToolStripMenuItem
-            // 
-            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(255, 22);
-            this.settingsToolStripMenuItem.Text = "Settings";
-            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
             // openSaveFolderToolStripMenuItem
             // 
@@ -311,6 +306,29 @@
             this.openDownloadedTorrentsFolderToolStripMenuItem.Size = new System.Drawing.Size(255, 22);
             this.openDownloadedTorrentsFolderToolStripMenuItem.Text = "Open Downloaded Torrents Folder";
             this.openDownloadedTorrentsFolderToolStripMenuItem.Click += new System.EventHandler(this.openDownloadedTorrentsFolderToolStripMenuItem_Click);
+            // 
+            // settingsToolStripMenuItem1
+            // 
+            this.settingsToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toggleSettingsToolStripMenuItem,
+            this.startMinimizedToolStripMenuItem});
+            this.settingsToolStripMenuItem1.Name = "settingsToolStripMenuItem1";
+            this.settingsToolStripMenuItem1.Size = new System.Drawing.Size(61, 20);
+            this.settingsToolStripMenuItem1.Text = "Settings";
+            // 
+            // toggleSettingsToolStripMenuItem
+            // 
+            this.toggleSettingsToolStripMenuItem.Name = "toggleSettingsToolStripMenuItem";
+            this.toggleSettingsToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.toggleSettingsToolStripMenuItem.Text = "Toggle Settings";
+            this.toggleSettingsToolStripMenuItem.Click += new System.EventHandler(this.toggleSettingsToolStripMenuItem_Click);
+            // 
+            // startMinimizedToolStripMenuItem
+            // 
+            this.startMinimizedToolStripMenuItem.Name = "startMinimizedToolStripMenuItem";
+            this.startMinimizedToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.startMinimizedToolStripMenuItem.Text = "Start Minimized";
+            this.startMinimizedToolStripMenuItem.Click += new System.EventHandler(this.startMinimizedToolStripMenuItem_Click);
             // 
             // Zeo
             // 
@@ -365,9 +383,11 @@
         private System.Windows.Forms.ToolStripMenuItem quitToolStripMenuItem;
         private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openSaveFolderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openDownloadedTorrentsFolderToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem toggleSettingsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem startMinimizedToolStripMenuItem;
     }
 }
 

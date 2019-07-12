@@ -50,12 +50,24 @@ namespace Zeo.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string saveTorrentsPath {
+        public string savePath {
             get {
-                return ((string)(this["saveTorrentsPath"]));
+                return ((string)(this["savePath"]));
             }
             set {
-                this["saveTorrentsPath"] = value;
+                this["savePath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool startMinimized {
+            get {
+                return ((bool)(this["startMinimized"]));
+            }
+            set {
+                this["startMinimized"] = value;
             }
         }
     }

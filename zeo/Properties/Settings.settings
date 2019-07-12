@@ -8,8 +8,11 @@
     <Setting Name="completedTorrentsPath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="saveTorrentsPath" Type="System.String" Scope="User">
+    <Setting Name="savePath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="startMinimized" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>
