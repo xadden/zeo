@@ -89,19 +89,7 @@ namespace FormZeo {
                 string[] filePaths = Directory.GetFiles(Settings.Default.completedTorrentsPath, "*[HorribleSubs]*.mkv");
                 foreach (string path in filePaths) {
                     string fileName = Path.GetFileName(path);
-                    string folderName;
-                    int start;
-
-                    folderName = fileName.Replace("[HorribleSubs] ", "");
-                    start = folderName.LastIndexOf(" - ");
-                    folderName = folderName.Remove(start, folderName.Length - start); //Remove everything after ' - ' is found
-
-                    string completedFolderPath = Settings.Default.completedTorrentsPath + System.IO.Path.DirectorySeparatorChar + fileName;
-                    string saveFolderPath = Settings.Default.savePath + System.IO.Path.DirectorySeparatorChar + folderName;
-                    string saveFilePath = Settings.Default.savePath + System.IO.Path.DirectorySeparatorChar + folderName + System.IO.Path.DirectorySeparatorChar + fileName;
-
-                    Directory.CreateDirectory(saveFolderPath); //if folder already exists, it will be ignored
-                    File.Move(completedFolderPath, saveFilePath);
+                    MoveFile(fileName);
                 }
             }
         }
@@ -145,27 +133,36 @@ namespace FormZeo {
          */
         private void OnChanged(object source, FileSystemEventArgs e) {
             if(!string.IsNullOrEmpty(Settings.Default.completedTorrentsPath) && !string.IsNullOrEmpty(Settings.Default.savePath)) {
-                string folderName;
-                int start;
-
-                folderName = e.Name.Replace("[HorribleSubs] ", "");
-                start = folderName.LastIndexOf(" - ");
-                folderName = folderName.Remove(start, folderName.Length - start); //Remove everything after ' - ' is found
-
-                string completedFolderPath = Settings.Default.completedTorrentsPath + System.IO.Path.DirectorySeparatorChar + e.Name;
-                string saveFolderPath = Settings.Default.savePath + System.IO.Path.DirectorySeparatorChar + folderName;
-                string saveFilePath = Settings.Default.savePath + System.IO.Path.DirectorySeparatorChar + folderName + System.IO.Path.DirectorySeparatorChar + e.Name;
-
-                Directory.CreateDirectory(saveFolderPath); //if folder already exists, it will be ignored
-                File.Move(completedFolderPath, saveFilePath);
+                MoveFile(e.Name);
             }
+        }
+
+        private void MoveFile(string fileName) {
+            string folderName;
+            int start;
+
+            folderName = fileName.Replace("[HorribleSubs] ", "");
+            start = folderName.LastIndexOf(" - ");
+            folderName = folderName.Remove(start, folderName.Length - start); //Remove everything after ' - ' is found
+
+            string completedFolderPath = Settings.Default.completedTorrentsPath + System.IO.Path.DirectorySeparatorChar + fileName;
+            string saveFolderPath = Settings.Default.savePath + System.IO.Path.DirectorySeparatorChar + folderName;
+            string saveFilePath = Settings.Default.savePath + System.IO.Path.DirectorySeparatorChar + folderName + System.IO.Path.DirectorySeparatorChar + fileName;
+
+            if (File.Exists(saveFilePath)) {
+                MessageBox.Show($"Error: The file \"{fileName}\" already exists in the directory \"{saveFolderPath}\"");
+                return;
+            }
+
+            Directory.CreateDirectory(saveFolderPath); //if folder already exists, it will be ignored
+            File.Move(completedFolderPath, saveFilePath);
         }
 
         /* 
          * Schedule task every 1hr
          */
         private void SetTimer() {
-            timerCheckEpisodes = new System.Timers.Timer(3600000); // Change to 3600000 = 1hr
+            timerCheckEpisodes = new System.Timers.Timer(3600000); // 3600000ms = 1hr
             timerCheckEpisodes.Elapsed += OnTimedEvent;
             timerCheckEpisodes.AutoReset = true;
             timerCheckEpisodes.Enabled = true;
